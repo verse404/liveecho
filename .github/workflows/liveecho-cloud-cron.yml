@@ -1,0 +1,51 @@
+name: LiveEcho Cloud Reminders & Tour Radar (Turso Cloud)
+
+on:
+  schedule:
+    # Runs every 30 minutes directly against Turso Cloud without waking Render Free Tier (0 Render hours).
+    # Unlimited & $0 on Public repos; ~1,440 min/mo (within 2,000-min free tier) on Private repos.
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+    inputs:
+      force_discover:
+        description: 'Force immediate ShowStart & RSS tour radar scan for all tracked artists'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: read
+
+jobs:
+  cloud-tick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install --require-hashes -r requirements.txt 2>/dev/null || pip install -r requirements.txt
+
+      - name: Run reminders, due tour discovery & DB maintenance against Turso
+        env:
+          CONCERT_TRACKER_ENV: production
+          CONCERT_TRACKER_SECRET_KEY: ${{ secrets.CONCERT_TRACKER_SECRET_KEY }}
+          TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+          TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+          FORCE_DISCOVER: ${{ inputs.force_discover }}
+        run: |
+          if [ -z "$TURSO_DATABASE_URL" ] || [ -z "$TURSO_AUTH_TOKEN" ] || [ -z "$CONCERT_TRACKER_SECRET_KEY" ]; then
+            echo "Turso / Secret Key repository secrets are not configured yet; skipping cloud tick."
+            exit 0
+          fi
+          if [ "$FORCE_DISCOVER" = "true" ]; then
+            python3 scripts/run_cloud_jobs.py --force-discover
+          else
+            python3 scripts/run_cloud_jobs.py
+          fi

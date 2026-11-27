@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>现场回响 LiveEcho — 中国与港澳中外演唱会排期、抢票回流与跨城观演门户</title>
+  <meta name="description" content="现场回响官方网站：一站式浏览中外热门乐队与歌手内地及港澳巡演排期、大麦猫眼抢票与退票回流窗口、城市巡演地图与月历视图、音乐节单日票撞场测算、文旅局审批风向标与跨城 12306 高铁开售联动。">
+  <link rel="manifest" href="/static/manifest.json">
+  <link rel="stylesheet" href="/static/website.css">
+</head>
+<body>
+  <header class="site-header" id="site-top">
+    <div class="site-container header-inner">
+      <div class="header-brand-row">
+        <a href="/website" class="site-brand" id="nav-brand-link">
+          <span class="seal-mark">回响</span>
+          <span class="brand-text-group">
+            <strong class="brand-name">现场回响 LiveEcho</strong>
+            <span class="brand-tagline">中外现场演出 · 预售与跨城观演门户</span>
+          </span>
+        </a>
+        <button
+          id="btn-mobile-nav-toggle"
+          type="button"
+          class="site-btn site-btn-sm mobile-nav-toggle"
+          aria-expanded="false"
+          aria-controls="site-nav-bar"
+          aria-label="展开导航菜单"
+        >☰ 菜单</button>
+      </div>
+
+      <nav class="site-nav" id="site-nav-bar" aria-label="主导航">
+        <a href="#watchlist" id="nav-watchlist">收藏提醒</a>
+        <a href="#drops" id="nav-drops">抢票回流</a>
+        <a href="#directory" id="nav-directory">巡演排期</a>
+        <a href="#festivals" id="nav-festivals">音乐节</a>
+        <a href="#approvals" id="nav-approvals">文旅过审</a>
+        <a href="#playground" id="nav-playground">文案解析</a>
+        <a href="#archive" id="nav-archive">票根馆</a>
+      </nav>
+
+      <div class="header-tools">
+        <div class="clock-readout" aria-label="当前北京时间">
+          <span class="clock-caption">北京时间</span>
+          <span id="site-beijing-clock" class="clock-value">--:--:--</span>
+        </div>
+        <label class="origin-picker" for="site-home-city-select">
+          <span class="origin-label">出发地</span>
+          <select id="site-home-city-select">
+            <option value="上海" selected>上海</option>
+            <option value="北京">北京</option>
+            <option value="广州">广州</option>
+            <option value="深圳">深圳</option>
+            <option value="杭州">杭州</option>
+            <option value="南京">南京</option>
+            <option value="成都">成都</option>
+            <option value="重庆">重庆</option>
+            <option value="武汉">武汉</option>
+            <option value="西安">西安</option>
+            <option value="香港">香港</option>
+          </select>
+        </label>
+        <button
+          id="btn-theme-toggle"
+          type="button"
+          class="site-btn site-btn-sm theme-toggle-btn"
+          title="切换宣纸日光 / 黑胶暗夜主题"
+        >◐ 黑胶暗夜</button>
+        <a href="/" id="btn-enter-app" class="site-btn site-btn-primary site-btn-sm">进入个人追踪库</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Section 1: Editorial Split Hero + Live Artist Search -->
+    <section class="hero-section">
+      <div class="site-container hero-grid">
+        <div class="hero-copy">
+          <p class="editorial-kicker">CHINA &amp; HK/MACAU LIVE MUSIC PORTAL · 2026–2027 演出季</p>
+          <h1 class="hero-headline">不错过每一场值得奔赴的现场</h1>
+          <p class="hero-lead">
+            汇聚文旅局（含涉外）过审公示、大麦/猫眼/Live Nation 分轮抢票与 48h 阶梯退票回流窗口，联动城市巡演地图、周末月历、场馆避坑攻略与跨城 12306 高铁预算。
+          </p>
+
+          <form id="hero-artist-search-form" class="hero-search-bar" role="search">
+            <div class="search-input-shell">
+              <input
+                id="hero-artist-input"
+                type="search"
+                placeholder="输入中外歌手或乐队原名（Coldplay / YOASOBI / 陈奕迅）..."
+                aria-label="搜索中外歌手或乐队近期中国及港澳演出"
+              >
+              <kbd class="search-kbd-hint" aria-hidden="true">/</kbd>
+            </div>
+            <button id="hero-artist-submit" type="submit" class="site-btn site-btn-primary">全网搜中外排期</button>
+          </form>
+
+          <div class="quick-artist-row" id="hero-quick-artists" aria-label="热门搜索艺人"></div>
+          <div id="hero-kpi-strip" class="hero-kpi-strip" aria-label="演出季实时概览"></div>
+          <div id="hero-search-result-panel" class="live-search-drawer" hidden></div>
+        </div>
+
+        <aside class="hero-feature-ticket" id="hero-spotlight-card" aria-label="焦点抢票演出">
+          <!-- Populated dynamically by website.js with live ticking countdown -->
+        </aside>
+      </div>
+    </section>
+
+    <!-- Section 1B: Favorited Artists & Upcoming Pre-Sale Alert Radar -->
+    <section id="watchlist" class="site-section watchlist-section">
+      <div class="site-container">
+        <div class="section-header-row">
+          <div>
+            <p class="section-index">MY FAVORITED ARTISTS · PRE-SALE CITY RADAR</p>
+            <h2 class="section-heading">★ 我收藏的歌手 &amp; 即将预售门票地点提醒</h2>
+          </div>
+          <div class="flex-row-wrap" id="watchlist-header-actions"></div>
+        </div>
+        <p class="section-desc">
+          搜索任意中外歌手点击「☆ 收藏歌手并开启预售提醒」（或在排期表点星标收藏），即可汇总该歌手在内地及港澳的即将预售城市与过审动态，支持自定义提前提醒分钟数、一键复制好友共享清单链接或导出高质感追星排期海报 (PNG)。
+        </p>
+        <div id="watchlist-chips-bar" class="watchlist-chips-bar" aria-label="已收藏歌手列表"></div>
+        <div id="watchlist-presale-grid" class="watchlist-presale-grid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- Section 2: Imminent Ticket Drops & Returned-Ticket Snipers -->
+    <section id="drops" class="site-section section-alt">
+      <div class="site-container">
+        <div class="section-header-row">
+          <div>
+            <p class="section-index">01 / IMMINENT SHOWS &amp; TICKET DROPS</p>
+            <h2 class="section-heading">近期即将开演 &amp; 抢票回流读秒</h2>
+          </div>
+          <a id="btn-download-all-ics" href="/api/public/showcase-ics?id=all&amp;home_city=%E4%B8%8A%E6%B5%B7" class="site-btn">
+            导出全排期日历 (.ics)
+          </a>
+        </div>
+        <p id="drops-section-desc" class="section-desc">
+          优先展示已导入的大麦/猫眼分轮开抢与 48h 阶梯退票回流倒计时；当暂无未开票轮次时，实时展示秀动即将开演的在售场次（粘贴官宣文案至下方工作台即可加入抢票与回流闹钟）。
+        </p>
+        <div id="drops-schedule-list" class="drop-ledger"></div>
+      </div>
+    </section>
+
+    <!-- Section 3: Nationwide Tour Directory with Calendar, Interactive City Map, Budget & Venue Guides -->
+    <section id="directory" class="site-section">
+      <div class="site-container">
+        <div class="section-header-row">
+          <div>
+            <p class="section-index">02 / NATIONWIDE &amp; HK-MACAU TOUR DIRECTORY</p>
+            <h2 class="section-heading">全国与港澳巡演排期大盘（列表 · 周末月历 · 巡演地图）</h2>
+          </div>
+          <div class="directory-toolbar-right">
+            <button id="btn-refresh-live-feed" type="button" class="site-btn site-btn-sm" title="重新从秀动实时拉取最新演出">↻ 刷新实时排期</button>
+            <div id="directory-view-tabs" class="segmented-switch" role="tablist" aria-label="切换排期展示视图"></div>
+            <div class="directory-search-wrap">
+              <input
+                id="directory-filter-input"
+                type="search"
+                class="site-input"
+                placeholder="筛选城市、歌手、场馆或批文"
+                aria-label="筛选全国巡演排期"
+              >
+            </div>
+          </div>
+        </div>
+
+        <div id="directory-category-tabs" class="region-bar" role="tablist" aria-label="按国内外阵容分类筛选"></div>
+        <div id="directory-region-tabs" class="region-bar" role="tablist" aria-label="按中国城市群筛选"></div>
+        <div id="directory-visual-stage" class="directory-visual-stage" hidden></div>
+        <div id="directory-table-body" class="tour-directory-list"></div>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Music Festival Single-Day & Clash Calculator -->
+    <section id="festivals" class="site-section section-alt">
+      <div class="site-container">
+        <div class="section-header-row">
+          <div>
+            <p class="section-index">03 / FESTIVAL SINGLE-DAY &amp; CLASH ADVISOR</p>
+            <h2 class="section-heading">音乐节拼盘决策器：买哪天单日票最值？会不会撞场？</h2>
+          </div>
+        </div>
+        <p class="section-desc">
+          第一步先选择一场音乐节，第二步从该场完整阵容中勾选想看的全部乐队，第三步自动比对分舞台时段是否撞场与最值单日票（若秀动尚未公开逐组分舞台时段，可直接在下方录入或粘贴官方时刻表即时测算）。
+        </p>
+        <div id="festival-band-toggles" class="band-toggle-row"></div>
+        <div id="festival-decision-output" class="festival-showcase-box"></div>
+      </div>
+    </section>
+
+    <!-- Section 5: Provincial Culture Bureau Early-Approval Filings -->
+    <section id="approvals" class="site-section">
+      <div class="site-container">
+        <div class="section-header-row">
+          <div>
+            <p class="section-index">04 / MINISTRY OF CULTURE EARLY-BIRD RADAR</p>
+            <h2 class="section-heading">省/市文旅局营业性演出过审风向标（含涉外批文）</h2>
+          </div>
+        </div>
+        <p class="section-desc">
+          大型演唱会须先取得省级或市级文化和旅游部门《营业性演出准予许可决定》（通常早于微博正式官宣 2–8 周）。提前锁定批文日期，即可按平价预订场馆周边可免费取消酒店。
+        </p>
+        <div id="approvals-ledger" class="approval-grid"></div>
+        <div id="culture-portal-links" class="portal-strip"></div>
+      </div>
+    </section>
+
+    <!-- Section 6: Live Smart Paste & Traditional Chinese Parser Playground -->
+    <section id="playground" class="site-section section-alt">
+      <div class="site-container">
+        <div class="section-header-row">
+          <div>
+            <p class="section-index">05 / SMART ANNOUNCEMENT PARSER STUDIO</p>
+            <h2 class="section-heading">官宣文案实时解析工作台（一键导出 .ics / 存入追踪库）</h2>
+          </div>
+        </div>
+        <p class="section-desc">
+          无需手动填表——直接粘贴大麦/猫眼/微博官宣、省文旅局涉外批文、香港红馆繁体公开发售通告或音乐节分舞台时刻表，实时提取场次、抢票节点、周末高铁预算与场馆避坑指南，并支持直接导出日历文件或加入本页排期/个人云端追踪库。
+        </p>
+
+        <div class="playground-presets" id="playground-preset-buttons"></div>
+        <div class="playground-split">
+          <div class="playground-editor">
+            <label for="playground-textarea" class="field-caption">待解析通告原文</label>
+            <textarea
+              id="playground-textarea"
+              rows="10"
+              placeholder="在此粘贴任意微博/大麦/秀动/文旅局/香港红馆繁体或欧美日韩涉外巡演通告..."
+            ></textarea>
+            <div class="playground-actions">
+              <input id="playground-photo-input" type="file" accept="image/png,image/jpeg,image/webp" class="hidden-file-input" aria-label="上传官宣海报或批文长图自动识图">
+              <button id="btn-playground-photo" type="button" class="site-btn site-btn-sm">📷 上传海报/批文长图识图</button>
+              <button id="btn-playground-clear" type="button" class="site-btn site-btn-sm">清空文案</button>
+              <button id="btn-run-playground" type="button" class="site-btn site-btn-primary">立即解析场次与节点</button>
+            </div>
+            <div id="playground-photo-preview" class="playground-photo-preview" hidden></div>
+          </div>
+          <div class="playground-output" id="playground-result-box" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 7: Collectible Ticket-Stub Museum + Custom PNG Stub Studio -->
+    <section id="archive" class="site-section">
+      <div class="site-container">
+        <div class="section-header-row">
+          <div>
+            <p class="section-index">06 / COLLECTIBLE TICKET-STUB ARCHIVE &amp; PNG STUDIO</p>
+            <h2 class="section-heading">观演票根纪念馆 &amp; 定制纪念票根图生成器</h2>
+          </div>
+          <button id="btn-toggle-stub-creator" type="button" class="site-btn site-btn-primary site-btn-sm">
+            ＋ 制作我的纪念票根 PNG
+          </button>
+        </div>
+        <p class="section-desc">
+          每一场奔赴都值得留存纸质质感票根：记录实付票面、看台遮挡与声场混响评价、安可大合唱曲目，并支持一键生成高清防撕齿纪念票根图 (PNG) 分享给朋友。
+        </p>
+        <form id="custom-stub-form" class="custom-stub-form" hidden>
+          <div class="stub-form-grid">
+            <label class="stub-field">
+              <span>歌手 / 乐队</span>
+              <input id="stub-in-artist" type="text" class="site-input" placeholder="如：Coldplay / 万能青年旅店" required maxlength="60">
+            </label>
+            <label class="stub-field">
+              <span>城市</span>
+              <input id="stub-in-city" type="text" class="site-input" placeholder="如：上海 / 香港" required maxlength="20">
+            </label>
+            <label class="stub-field">
+              <span>演出日期</span>
+              <input id="stub-in-date" type="date" class="site-input" required>
+            </label>
+            <label class="stub-field">
+              <span>场馆名称</span>
+              <input id="stub-in-venue" type="text" class="site-input" placeholder="如：梅赛德斯-奔驰文化中心" maxlength="60">
+            </label>
+            <label class="stub-field">
+              <span>座位 / 区域</span>
+              <input id="stub-in-seat" type="text" class="site-input" placeholder="如：二层 218区 5排" maxlength="60">
+            </label>
+            <label class="stub-field">
+              <span>实付票价 (¥)</span>
+              <input id="stub-in-paid" type="number" class="site-input" min="0" max="99999" placeholder="680">
+            </label>
+          </div>
+          <div class="stub-form-grid stub-form-grid-wide">
+            <label class="stub-field">
+              <span>声场与选座避坑评价</span>
+              <input id="stub-in-acoustics" type="text" class="site-input" placeholder="如：中轴声像极稳，散场步行 5 分钟进地铁" maxlength="160">
+            </label>
+            <label class="stub-field">
+              <span>最难忘的安可瞬间</span>
+              <input id="stub-in-memory" type="text" class="site-input" placeholder="如：终曲全场星海合唱，值回票价" maxlength="160">
+            </label>
+          </div>
+          <div class="flex-row-between mt-sm">
+            <span class="muted-line">纯本地 Canvas 高清绘制，无需上传服务器即可下载 PNG 纪念票根图。</span>
+            <div class="flex-row-wrap">
+              <button id="btn-cancel-stub-creator" type="button" class="site-btn site-btn-sm">收起</button>
+              <button type="submit" class="site-btn site-btn-primary site-btn-sm">加入票根馆并生成 PNG</button>
+            </div>
+          </div>
+        </form>
+        <div id="stub-museum-grid" class="stub-museum-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-container footer-inner">
+      <div>
+        <div class="footer-brand">现场回响 LiveEcho · 中外演唱会排期与跨城观演门户</div>
+        <p class="footer-note">
+          默认零 API Key 开箱即用 · 支持宣纸/黑胶双主题、城市巡演地图与周末月历、高清 PNG 纪念票根导出、.ics 日历闹钟、Bark / Server酱 / Telegram / 飞书 Webhook / SMTP 推送与 Turso 云端同步。
+        </p>
+      </div>
+      <div class="footer-cta-group">
+        <a href="/" id="footer-open-vault" class="site-btn site-btn-primary">打开个人追踪工作台 →</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Quick-Jump Dock (appears smoothly when scrolled) -->
+  <div id="floating-dock" class="floating-dock" hidden>
+    <a href="#watchlist" id="dock-watchlist-btn" class="dock-pill">★ 收藏提醒 (2)</a>
+    <button id="dock-top-btn" type="button" class="dock-pill" aria-label="回到顶部">↑ 顶部</button>
+  </div>
+
+  <!-- Accessible Custom Modal for PNG Ticket Stub / Watchlist Poster Export & Share Link -->
+  <div id="site-modal-overlay" class="site-modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="site-modal-title">
+    <div class="site-modal-card">
+      <div class="site-modal-head">
+        <strong id="site-modal-title">纪念票根高清预览</strong>
+        <button id="site-modal-close" type="button" class="site-btn site-btn-sm" aria-label="关闭弹窗">关闭 ✕</button>
+      </div>
+      <div id="site-modal-body" class="site-modal-body"></div>
+      <div id="site-modal-foot" class="site-modal-foot"></div>
+    </div>
+  </div>
+
+  <div id="site-toast-stack" class="site-toast-stack" aria-live="assertive"></div>
+  <script nonce="__CSP_NONCE__" src="/static/website.js"></script>
+</body>
+</html>
